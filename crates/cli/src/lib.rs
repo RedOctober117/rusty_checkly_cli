@@ -1,3 +1,4 @@
+pub mod check;
 pub mod email_alert_channel;
 
 use serde::{Deserialize, Serialize};
