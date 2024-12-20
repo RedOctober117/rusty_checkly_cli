@@ -1,4 +1,4 @@
-use cli::EmailAlertChannel;
+use cli::email_alert_channel::EmailAlertChannel;
 
 // https://api-test.checklyhq.com/#/
 

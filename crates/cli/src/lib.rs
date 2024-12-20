@@ -1,3 +1,5 @@
+pub mod email_alert_channel;
+
 use serde::{Deserialize, Serialize};
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub enum AlertChannelType {
@@ -62,46 +64,6 @@ impl Default for AlertChannelProperties {
             ssl_expiry: Some(true),
             ssl_expiry_threshold: Some(30),
         }
-    }
-}
-
-#[derive(Serialize, Deserialize, Clone, Debug)]
-pub struct EmailAlertChannel {
-    address: String,
-    #[serde(flatten)]
-    channel_props: AlertChannelProperties,
-    #[serde(flatten)]
-    construct_props: ConstructProperties,
-}
-
-impl EmailAlertChannel {
-    pub fn new(logical_id: String, address: String) -> Self {
-        Self {
-            address,
-            channel_props: AlertChannelProperties::default(),
-            construct_props: ConstructProperties::new(
-                AlertChannelType::EMAIL,
-                logical_id,
-                None,
-                false,
-            ),
-        }
-    }
-
-    pub fn address(&self) -> &str {
-        &self.address
-    }
-}
-
-impl AlertChannel for EmailAlertChannel {
-    fn get_channel_properties(&self) -> AlertChannelProperties {
-        self.channel_props
-    }
-}
-
-impl Construct for EmailAlertChannel {
-    fn get_construct_properties(&self) -> ConstructProperties {
-        self.construct_props.clone()
     }
 }
 
