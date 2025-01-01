@@ -44,8 +44,8 @@ impl EmailAlertChannel {
 }
 
 impl AlertChannel for EmailAlertChannel {
-    fn get_channel_properties(&self) -> AlertChannelProperties {
-        self.channel_props
+    fn get_channel_properties(&self) -> &AlertChannelProperties {
+        &self.channel_props
     }
 }
 

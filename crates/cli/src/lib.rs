@@ -43,10 +43,10 @@ pub trait Construct {
 }
 
 pub trait AlertChannel {
-    fn get_channel_properties(&self) -> AlertChannelProperties;
+    fn get_channel_properties(&self) -> &AlertChannelProperties;
 }
 
-#[derive(Serialize, Deserialize, Clone, Copy, Debug)]
+#[derive(Serialize, Deserialize, Clone, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct AlertChannelProperties {
     send_recovery: Option<bool>,
@@ -54,6 +54,8 @@ pub struct AlertChannelProperties {
     send_degraded: Option<bool>,
     ssl_expiry: Option<bool>,
     ssl_expiry_threshold: Option<usize>,
+    auto_subscribe: Option<bool>,
+    subscriptions: Option<Vec<usize>>,
 }
 
 impl Default for AlertChannelProperties {
@@ -64,6 +66,8 @@ impl Default for AlertChannelProperties {
             send_degraded: Some(false),
             ssl_expiry: Some(true),
             ssl_expiry_threshold: Some(30),
+            auto_subscribe: Some(false),
+            subscriptions: Some(Vec::new()),
         }
     }
 }
@@ -78,8 +82,8 @@ pub struct MSTeamsAlertChannel {
 }
 
 impl AlertChannel for MSTeamsAlertChannel {
-    fn get_channel_properties(&self) -> AlertChannelProperties {
-        self.channel_props
+    fn get_channel_properties(&self) -> &AlertChannelProperties {
+        &self.channel_props
     }
 }
 

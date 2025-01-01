@@ -1,9 +1,11 @@
+use std::fmt::Display;
+
 use serde::{Deserialize, Serialize};
 
 use crate::AlertChannel;
 
-#[serde(rename_all = "camelCase")]
 #[derive(Serialize, Deserialize, Clone, Debug)]
+#[serde(rename_all = "camelCase")]
 pub struct Check<T>
 where
     T: AlertChannel,
@@ -87,7 +89,7 @@ impl EnvironmentVariable {
     }
 }
 
-#[derive(Serialize, Deserialize, Clone, Debug)]
+#[derive(Deserialize, Clone, Debug)]
 pub enum Region {
     UsEast1,
     UsEast2,
@@ -111,6 +113,46 @@ pub enum Region {
     ApNortheast3,
     ApSouth1,
     AfSouth1,
+}
+
+impl Display for Region {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let string = match self {
+            Region::UsEast1 => "us-east-1",
+            Region::UsEast2 => todo!(),
+            Region::UsWest1 => todo!(),
+            Region::UsWest2 => todo!(),
+            Region::CaCentral1 => todo!(),
+            Region::SaEast1 => todo!(),
+            Region::EuWest1 => todo!(),
+            Region::EuCentral1 => todo!(),
+            Region::EuWest2 => todo!(),
+            Region::EuWest3 => todo!(),
+            Region::EuNorth1 => todo!(),
+            Region::EuSouth1 => todo!(),
+            Region::MeSouth1 => todo!(),
+            Region::ApSoutheast1 => todo!(),
+            Region::ApNortheast1 => todo!(),
+            Region::ApEast1 => todo!(),
+            Region::ApSoutheast2 => todo!(),
+            Region::ApSoutheast3 => todo!(),
+            Region::ApNortheast2 => todo!(),
+            Region::ApNortheast3 => todo!(),
+            Region::ApSouth1 => todo!(),
+            Region::AfSouth1 => todo!(),
+        };
+
+        write!(f, "{}", string)
+    }
+}
+
+impl serde::Serialize for Region {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(&self.to_string())
+    }
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
