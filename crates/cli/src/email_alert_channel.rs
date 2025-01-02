@@ -1,7 +1,8 @@
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    AlertChannel, AlertChannelProperties, AlertChannelType, Construct, ConstructProperties,
+    alert_channel::{AlertChannel, AlertChannelProperties, AlertChannelType},
+    construct::{Construct, ConstructProperties},
 };
 
 #[derive(Serialize, Deserialize, Clone, Debug)]

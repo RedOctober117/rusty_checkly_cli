@@ -1,0 +1,61 @@
+name = ""
+activated = true
+muted = false
+doubleCheck = true
+shouldFail = false
+locations = ["us-east-1", "eu-central-1"]
+tags = ["production"]
+useGlobalSettings = true
+groupId = ""
+groupOrder = ""
+runtimeId = ""
+alertChannelSubscriptions = []
+runParallel = false
+frequency = 10
+frequencyOffset = 1
+degradedResponseTime = 10000
+maxResponseTime = 20000
+privateLocations = ["data-center-eu"]
+tearDownSnippetId = ""
+setupSnippetId = ""
+localSetupScript = ""
+localTearDownScript = ""
+
+[alertSettings]
+escalationType = "RUN_BASED"
+
+[alertSettings.runBasedEscalation]
+failedRunThreshold = 1
+
+[alertSettings.reminders]
+amount = 0
+interval = 5
+
+[alertSettings.parallelRunFailureThreshold]
+enabled = false
+percentage = 10
+
+[alertSettings.retryStragey]
+type = "FIXED"
+baseBackoffSeconds = 60
+maxRetries = 2
+maxDurationSeconds = 600
+sameRegion = true
+
+[alertSettings.request]
+method = "GET"
+url = "bruh.com"
+followRedirects = true
+skipSSL = false
+ipFamily = "IPv4"
+body = ""
+bodyType = "NONE"
+headers = [{ key = "string", value = "", locked = false }]
+queryParameters = [{ key = "string", value = "", locked = false }]
+assertions = [
+    { source = "STATUS_CODE", compression = "NOT_EMPTY", target = 200 },
+]
+
+[alertSettings.request.basicAuth]
+username = "admin"
+password = "abc12345"
