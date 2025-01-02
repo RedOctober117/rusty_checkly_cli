@@ -1,5 +1,6 @@
 pub mod check;
 pub mod email_alert_channel;
+pub mod slack_alert_channel;
 
 use serde::{Deserialize, Serialize};
 #[derive(Serialize, Deserialize, Clone, Debug)]
@@ -16,9 +17,9 @@ pub enum AlertChannelType {
 #[derive(Serialize, Deserialize, Clone, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct ConstructProperties {
-    type_: AlertChannelType,
     logical_id: String,
     physical_id: Option<String>,
+    type_: AlertChannelType,
     member: bool,
 }
 
@@ -49,13 +50,13 @@ pub trait AlertChannel {
 #[derive(Serialize, Deserialize, Clone, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct AlertChannelProperties {
+    subscriptions: Option<Vec<usize>>,
+    ssl_expiry_threshold: Option<u8>,
     send_recovery: Option<bool>,
     send_failure: Option<bool>,
     send_degraded: Option<bool>,
     ssl_expiry: Option<bool>,
-    ssl_expiry_threshold: Option<usize>,
     auto_subscribe: Option<bool>,
-    subscriptions: Option<Vec<usize>>,
 }
 
 impl Default for AlertChannelProperties {
@@ -74,11 +75,11 @@ impl Default for AlertChannelProperties {
 
 #[derive(Serialize, Deserialize, Clone)]
 pub struct MSTeamsAlertChannel {
+    channel_props: AlertChannelProperties,
     alert_name: String,
     teams_channel_name: String,
     webhook_url: String,
     alert_template: Option<String>,
-    channel_props: AlertChannelProperties,
 }
 
 impl AlertChannel for MSTeamsAlertChannel {

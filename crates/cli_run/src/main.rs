@@ -1,11 +1,13 @@
-use cli::email_alert_channel::EmailAlertChannel;
+use cli::{check::Region, email_alert_channel::EmailAlertChannel};
 
 // https://api-test.checklyhq.com/#/
 
 fn main() {
-    let alert_channel = EmailAlertChannel::new("test_id".into(), "telemakos@telemakos.io".into());
-    let email_str = serde_json::to_string(&alert_channel).unwrap();
-    println!("{}", serde_json::to_string_pretty(&alert_channel).unwrap());
+    // let alert_channel = EmailAlertChannel::new("test_id".into(), "telemakos@telemakos.io".into());
+    // let email_str = serde_json::to_string(&alert_channel).unwrap();
+    // println!("{}", serde_json::to_string_pretty(&alert_channel).unwrap());
+    let test = Region::AfSouth1;
+    println!("{}", test);
 
     // let check = Check::new_with_defaults(
     //     "test".into(),

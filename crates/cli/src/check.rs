@@ -10,23 +10,23 @@ pub struct Check<T>
 where
     T: AlertChannel,
 {
+    alert_settings: Option<AlertEscalation>,
+    retry_strategy: Option<RetryStrategy>,
+    alert_channels: Option<Vec<T>>,
     name: String,
+    locations: Option<Vec<Region>>,
+    private_locations: Option<Vec<Region>>,
+    environment_variables: Option<Vec<EnvironmentVariable>>,
+    tags: Option<Vec<String>>,
+    group_id: Option<String>,
+    runtime_id: Option<String>,
+    frequency: Option<u16>,
+    frequency_offset: Option<u8>,
     activated: Option<bool>,
     muted: Option<bool>,
     double_check: Option<bool>,
     should_fail: Option<bool>,
-    runtime_id: Option<String>,
-    locations: Option<Vec<Region>>,
-    private_locations: Option<Vec<Region>>,
-    tags: Option<Vec<String>>,
-    frequency: Option<usize>,
-    frequency_offset: Option<usize>,
-    environment_variables: Option<Vec<EnvironmentVariable>>,
-    group_id: Option<String>,
-    alert_channels: Option<Vec<T>>,
     // test_only: Option<bool>,
-    retry_strategy: Option<RetryStrategy>,
-    alert_settings: Option<AlertEscalation>,
     use_global_alert_settings: Option<bool>,
     run_parallel: Option<bool>,
 }
@@ -119,27 +119,27 @@ impl Display for Region {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let string = match self {
             Region::UsEast1 => "us-east-1",
-            Region::UsEast2 => todo!(),
-            Region::UsWest1 => todo!(),
-            Region::UsWest2 => todo!(),
-            Region::CaCentral1 => todo!(),
-            Region::SaEast1 => todo!(),
-            Region::EuWest1 => todo!(),
-            Region::EuCentral1 => todo!(),
-            Region::EuWest2 => todo!(),
-            Region::EuWest3 => todo!(),
-            Region::EuNorth1 => todo!(),
-            Region::EuSouth1 => todo!(),
-            Region::MeSouth1 => todo!(),
-            Region::ApSoutheast1 => todo!(),
-            Region::ApNortheast1 => todo!(),
-            Region::ApEast1 => todo!(),
-            Region::ApSoutheast2 => todo!(),
-            Region::ApSoutheast3 => todo!(),
-            Region::ApNortheast2 => todo!(),
-            Region::ApNortheast3 => todo!(),
-            Region::ApSouth1 => todo!(),
-            Region::AfSouth1 => todo!(),
+            Region::UsEast2 => "us-east-2",
+            Region::UsWest1 => "us-west-1",
+            Region::UsWest2 => "us-west-2",
+            Region::CaCentral1 => "ca-central-1",
+            Region::SaEast1 => "sa-east-1",
+            Region::EuWest1 => "eu-west-1",
+            Region::EuCentral1 => "eu-central-1",
+            Region::EuWest2 => "eu-west-2",
+            Region::EuWest3 => "eu-west-3",
+            Region::EuNorth1 => "eu-north-1",
+            Region::EuSouth1 => "eu-south-1",
+            Region::MeSouth1 => "me-south-1",
+            Region::ApSoutheast1 => "ap-southeast-1",
+            Region::ApNortheast1 => "ap-northeast-1",
+            Region::ApEast1 => "ap-east-1",
+            Region::ApSoutheast2 => "ap-southeast-2",
+            Region::ApSoutheast3 => "ap-southeast-3",
+            Region::ApNortheast2 => "ap-northeast-2",
+            Region::ApNortheast3 => "ap-northeast-3",
+            Region::ApSouth1 => "ap-south-1",
+            Region::AfSouth1 => "af-south-1",
         };
 
         write!(f, "{}", string)
@@ -165,10 +165,10 @@ pub enum RetryStrategyType {
 #[derive(Serialize, Deserialize, Clone, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct RetryStrategy {
+    base_backoff_seconds: Option<u16>,
+    max_retries: Option<u8>,
+    max_duration_seconds: Option<u16>,
     type_: RetryStrategyType,
-    base_backoff_seconds: Option<usize>,
-    max_retries: Option<usize>,
-    max_duration_seconds: Option<usize>,
     same_region: Option<bool>,
 }
 
@@ -193,8 +193,8 @@ pub enum AlertEscalationType {
 #[derive(Serialize, Deserialize, Clone, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct AlertEscalationReminder {
-    amount: Option<usize>,
-    interval: Option<usize>,
+    amount: Option<u16>,
+    interval: Option<u8>,
 }
 
 impl Default for AlertEscalationReminder {
@@ -210,7 +210,7 @@ impl Default for AlertEscalationReminder {
 #[serde(rename_all = "camelCase")]
 pub struct AlertEscalationParallelRunFailureThreshold {
     enabled: Option<bool>,
-    percentage: Option<usize>,
+    percentage: Option<u8>,
 }
 
 impl Default for AlertEscalationParallelRunFailureThreshold {
@@ -225,11 +225,11 @@ impl Default for AlertEscalationParallelRunFailureThreshold {
 #[derive(Serialize, Deserialize, Clone, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct AlertEscalation {
-    escalation_type: AlertEscalationType,
     reminders: AlertEscalationReminder,
-    run_based_escalation: usize,
-    time_based_escalation: usize,
     parallel_run_failure_threshold: Option<AlertEscalationParallelRunFailureThreshold>,
+    escalation_type: AlertEscalationType,
+    run_based_escalation: u8,
+    time_based_escalation: u8,
 }
 
 impl Default for AlertEscalation {

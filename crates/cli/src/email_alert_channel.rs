@@ -17,11 +17,11 @@ impl EmailAlertChannelConfig {
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct EmailAlertChannel {
-    config: EmailAlertChannelConfig,
-    #[serde(flatten)]
-    channel_props: AlertChannelProperties,
     #[serde(flatten)]
     construct_props: ConstructProperties,
+    #[serde(flatten)]
+    channel_props: AlertChannelProperties,
+    config: EmailAlertChannelConfig,
 }
 
 impl EmailAlertChannel {
