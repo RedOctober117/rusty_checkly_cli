@@ -18,9 +18,11 @@ pub enum AlertChannelType {
 #[serde(rename_all = "camelCase")]
 pub struct ConstructProperties {
     logical_id: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
     physical_id: Option<String>,
     type_: AlertChannelType,
-    member: bool,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    member: Option<bool>,
 }
 
 impl ConstructProperties {
@@ -28,7 +30,7 @@ impl ConstructProperties {
         construct_type: AlertChannelType,
         logical_id: String,
         physical_id: Option<String>,
-        member: bool,
+        member: Option<bool>,
     ) -> Self {
         Self {
             type_: construct_type,
@@ -47,10 +49,29 @@ pub trait AlertChannel {
     fn get_channel_properties(&self) -> &AlertChannelProperties;
 }
 
+#[derive(Serialize, Deserialize, Debug, Clone)]
+#[serde(rename_all = "camelCase")]
+struct GroupCheck {
+    name: String,
+    id: usize,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+#[serde(rename_all = "camelCase")]
+struct Subscription {
+    check_group: GroupCheck,
+    check: String,
+    check_id: String,
+    activated: bool,
+    alert_channel_id: usize,
+    group_id: usize,
+    id: usize,
+}
+
 #[derive(Serialize, Deserialize, Clone, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct AlertChannelProperties {
-    subscriptions: Option<Vec<usize>>,
+    subscriptions: Option<Vec<Subscription>>,
     ssl_expiry_threshold: Option<u8>,
     send_recovery: Option<bool>,
     send_failure: Option<bool>,

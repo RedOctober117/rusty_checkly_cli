@@ -1,0 +1,30 @@
+# Email Alert Channel Config
+logicalId = "123  "     # not needed for creating an alert??
+type = "EMAIL"
+sendRecovery = true
+sendFailure = true
+sendDegraded = false
+sslExpiry = false
+sslExpiryThreshold = 30
+autoSubscribe = false
+
+[config]
+address = "test@example.com"
+
+[[subscriptions]]
+id = 456
+checkId = ""
+alertChannelId = 398457
+activated = true
+groupId = 123455
+check = ""
+checkGroup = { id = 123124, name = "group" }
+
+[[subscriptions]]
+id = 45678
+checkId = ""
+alertChannelId = 398457
+activated = true
+groupId = 123455
+check = ""
+checkGroup = { id = 123124, name = "group" }

@@ -33,7 +33,7 @@ impl EmailAlertChannel {
                 AlertChannelType::EMAIL,
                 logical_id,
                 None,
-                false,
+                Some(false),
             ),
         }
     }
