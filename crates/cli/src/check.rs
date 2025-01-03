@@ -6,17 +6,13 @@ use crate::alert_channel::AlertChannel;
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
 #[serde(rename_all = "camelCase")]
-pub struct Check<T>
-where
-    T: AlertChannel,
-{
+pub struct Check {
     alert_settings: Option<AlertEscalation>,
     retry_strategy: Option<RetryStrategy>,
-    alert_channel_subscriptions: Option<Vec<T>>,
+    alert_channel_subscriptions: Option<Vec<String>>,
     name: String,
-    #[serde(deserialize_with = "Region::from")]
     locations: Option<Vec<Region>>, // might need to change to string rq
-    private_locations: Option<Vec<Region>>, // might need to change to string rq
+    private_locations: Option<Vec<String>>, // might need to change to string rq
     environment_variables: Option<Vec<EnvironmentVariable>>,
     tags: Option<Vec<String>>,
     group_id: Option<String>,
@@ -38,39 +34,40 @@ where
     run_parallel: Option<bool>,
 }
 
-impl<T> Check<T>
-where
-    T: AlertChannel,
-{
-    pub fn new_with_defaults(name: String, locations: Vec<Region>, alert_channels: Vec<T>) -> Self {
-        Self {
-            name,
-            activated: Some(true),
-            muted: Some(false),
-            double_check: Some(true),
-            should_fail: Some(false),
-            locations: Some(locations),
-            tags: None,
-            alert_settings: Some(AlertEscalation::default()),
-            use_global_alert_settings: Some(false),
-            group_id: None,
-            runtime_id: None,
-            alert_channel_subscriptions: Some(alert_channels),
-            retry_strategy: Some(RetryStrategy::default()),
-            run_parallel: Some(false),
-            frequency: Some(10),
-            frequency_offset: Some(1),
-            environment_variables: None,
-            private_locations: None,
-            tear_down_snippet_id: None,
-            setup_snippet_id: None,
-            local_setup_script: None,
-            local_tear_down_script: None,
-            degraded_response_time: Some(10000),
-            max_response_time: Some(20000),
-            // test_only: ,
-        }
-    }
+impl Check {
+    // pub fn new_with_defaults(
+    //     name: String,
+    //     locations: Vec<String>,
+    //     alert_channels: Vec<String>,
+    // ) -> Self {
+    //     Self {
+    //         name,
+    //         activated: Some(true),
+    //         muted: Some(false),
+    //         double_check: Some(true),
+    //         should_fail: Some(false),
+    //         locations: Some(locations),
+    //         tags: None,
+    //         alert_settings: Some(AlertEscalation::default()),
+    //         use_global_alert_settings: Some(false),
+    //         group_id: None,
+    //         runtime_id: None,
+    //         alert_channel_subscriptions: Some(alert_channels),
+    //         retry_strategy: Some(RetryStrategy::default()),
+    //         run_parallel: Some(false),
+    //         frequency: Some(10),
+    //         frequency_offset: Some(1),
+    //         environment_variables: None,
+    //         private_locations: None,
+    //         tear_down_snippet_id: None,
+    //         setup_snippet_id: None,
+    //         local_setup_script: None,
+    //         local_tear_down_script: None,
+    //         degraded_response_time: Some(10000),
+    //         max_response_time: Some(20000),
+    //         // test_only: ,
+    //     }
+    // }
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
@@ -103,88 +100,86 @@ impl EnvironmentVariable {
 }
 
 #[derive(Deserialize, Clone, Debug)]
+#[serde(rename_all = "kebab-case")]
 pub enum Region {
-    Unknown,
-    UsEast1,
-    UsEast2,
-    UsWest1,
-    UsWest2,
-    CaCentral1,
-    SaEast1,
-    EuWest1,
-    EuCentral1,
-    EuWest2,
-    EuWest3,
-    EuNorth1,
-    EuSouth1,
-    MeSouth1,
-    ApSoutheast1,
-    ApNortheast1,
-    ApEast1,
-    ApSoutheast2,
-    ApSoutheast3,
-    ApNortheast2,
-    ApNortheast3,
-    ApSouth1,
-    AfSouth1,
+    UsEast_1,
+    UsEast_2,
+    UsWest_1,
+    UsWest_2,
+    CaCentral_1,
+    SaEast_1,
+    EuWest_1,
+    EuCentral_1,
+    EuWest_2,
+    EuWest_3,
+    EuNorth_1,
+    EuSouth_1,
+    MeSouth_1,
+    ApSoutheast_1,
+    ApNortheast_1,
+    ApEast_1,
+    ApSoutheast_2,
+    ApSoutheast_3,
+    ApNortheast_2,
+    ApNortheast_3,
+    ApSouth_1,
+    AfSouth_1,
 }
 
-impl From<String> for Region {
-    fn from(value: String) -> Self {
-        match value.as_str() {
-            "us-east-1" => Region::UsEast1,
-            "us-east-2" => Region::UsEast2,
-            "us-west-1" => Region::UsWest1,
-            "us-west-2" => Region::UsWest2,
-            "ca-central-1" => Region::CaCentral1,
-            "sa-east-1" => Region::SaEast1,
-            "eu-west-1" => Region::EuWest1,
-            "eu-central-1" => Region::EuCentral1,
-            "eu-west-2" => Region::EuWest2,
-            "eu-west-3" => Region::EuWest3,
-            "eu-north-1" => Region::EuNorth1,
-            "eu-south-1" => Region::EuSouth1,
-            "me-south-1" => Region::MeSouth1,
-            "ap-southeast-1" => Region::ApSoutheast1,
-            "ap-northeast-1" => Region::ApNortheast1,
-            "ap-east-1" => Region::ApEast1,
-            "ap-southeast-2" => Region::ApSoutheast2,
-            "ap-southeast-3" => Region::ApSoutheast3,
-            "ap-northeast-2" => Region::ApNortheast2,
-            "ap-northeast-3" => Region::ApNortheast3,
-            "ap-south-1" => Region::ApSouth1,
-            "af-south-1" => Region::AfSouth1,
-            _ => Region::Unknown,
-        }
-    }
-}
+// impl From<String> for Region {
+//     fn from(value: String) -> Self {
+//         match value.as_str() {
+//             "us-east-1" => Region::UsEast_1,
+//             "us-east-2" => Region::UsEast_2,
+//             "us-west-1" => Region::UsWest_1,
+//             "us-west-2" => Region::UsWest_2,
+//             "ca-central-1" => Region::CaCentral_1,
+//             "sa-east-1" => Region::SaEast_1,
+//             "eu-west-1" => Region::EuWest_1,
+//             "eu-central-1" => Region::EuCentral_1,
+//             "eu-west-2" => Region::EuWest_2,
+//             "eu-west-3" => Region::EuWest_3,
+//             "eu-north-1" => Region::EuNorth_1,
+//             "eu-south-1" => Region::EuSouth_1,
+//             "me-south-1" => Region::MeSouth_1,
+//             "ap-southeast-1" => Region::ApSoutheast_1,
+//             "ap-northeast-1" => Region::ApNortheast_1,
+//             "ap-east-1" => Region::ApEast_1,
+//             "ap-southeast-2" => Region::ApSoutheast_2,
+//             "ap-southeast-3" => Region::ApSoutheast_3,
+//             "ap-northeast-2" => Region::ApNortheast_2,
+//             "ap-northeast-3" => Region::ApNortheast_3,
+//             "ap-south-1" => Region::ApSouth_1,
+//             "af-south-1" => Region::AfSouth_1,
+//         }
+//     }
+// }
 
 impl Display for Region {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let string = match self {
-            Region::UsEast1 => "us-east-1",
-            Region::UsEast2 => "us-east-2",
-            Region::UsWest1 => "us-west-1",
-            Region::UsWest2 => "us-west-2",
-            Region::CaCentral1 => "ca-central-1",
-            Region::SaEast1 => "sa-east-1",
-            Region::EuWest1 => "eu-west-1",
-            Region::EuCentral1 => "eu-central-1",
-            Region::EuWest2 => "eu-west-2",
-            Region::EuWest3 => "eu-west-3",
-            Region::EuNorth1 => "eu-north-1",
-            Region::EuSouth1 => "eu-south-1",
-            Region::MeSouth1 => "me-south-1",
-            Region::ApSoutheast1 => "ap-southeast-1",
-            Region::ApNortheast1 => "ap-northeast-1",
-            Region::ApEast1 => "ap-east-1",
-            Region::ApSoutheast2 => "ap-southeast-2",
-            Region::ApSoutheast3 => "ap-southeast-3",
-            Region::ApNortheast2 => "ap-northeast-2",
-            Region::ApNortheast3 => "ap-northeast-3",
-            Region::ApSouth1 => "ap-south-1",
-            Region::AfSouth1 => "af-south-1",
-            Region::Unknown => "",
+            Region::UsEast_1 => "us-east-1",
+            Region::UsEast_2 => "us-east-2",
+            Region::UsWest_1 => "us-west-1",
+            Region::UsWest_2 => "us-west-2",
+            Region::CaCentral_1 => "ca-central-1",
+            Region::SaEast_1 => "sa-east-1",
+            Region::EuWest_1 => "eu-west-1",
+            Region::EuCentral_1 => "eu-central-1",
+            Region::EuWest_2 => "eu-west-2",
+            Region::EuWest_3 => "eu-west-3",
+            Region::EuNorth_1 => "eu-north-1",
+            Region::EuSouth_1 => "eu-south-1",
+            Region::MeSouth_1 => "me-south-1",
+            Region::ApSoutheast_1 => "ap-southeast-1",
+            Region::ApNortheast_1 => "ap-northeast-1",
+            Region::ApEast_1 => "ap-east-1",
+            Region::ApSoutheast_2 => "ap-southeast-2",
+            Region::ApSoutheast_3 => "ap-southeast-3",
+            Region::ApNortheast_2 => "ap-northeast-2",
+            Region::ApNortheast_3 => "ap-northeast-3",
+            Region::ApSouth_1 => "ap-south-1",
+            Region::AfSouth_1 => "af-south-1",
         };
 
         write!(f, "{}", string)
@@ -230,6 +225,7 @@ impl Default for RetryStrategy {
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum AlertEscalationType {
     RunBased,
     TimeBased,
@@ -273,8 +269,8 @@ pub struct AlertEscalation {
     reminders: AlertEscalationReminder,
     parallel_run_failure_threshold: Option<AlertEscalationParallelRunFailureThreshold>,
     escalation_type: AlertEscalationType,
-    run_based_escalation: u8, // may need to be struct
-    time_based_escalation: u8,
+    run_based_escalation: RunBasedEscalation, // may need to be struct
+    time_based_escalation: Option<u8>,
     request: AlertEscalationRequest,
 }
 
@@ -283,14 +279,22 @@ impl Default for AlertEscalation {
         Self {
             escalation_type: AlertEscalationType::RunBased,
             reminders: AlertEscalationReminder::default(),
-            run_based_escalation: 1,
-            time_based_escalation: 5,
+            run_based_escalation: RunBasedEscalation {
+                failed_run_threshold: 1,
+            },
+            time_based_escalation: Some(5),
             parallel_run_failure_threshold: Some(
                 AlertEscalationParallelRunFailureThreshold::default(),
             ),
             request: AlertEscalationRequest::default(),
         }
     }
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug)]
+#[serde(rename_all = "camelCase")]
+pub struct RunBasedEscalation {
+    failed_run_threshold: u8,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug)]

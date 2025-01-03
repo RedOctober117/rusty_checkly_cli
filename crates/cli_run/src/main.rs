@@ -22,7 +22,7 @@ fn main() {
         let mut buffer = String::new();
         let mut file = File::open("api-check.toml").unwrap();
         file.read_to_string(&mut buffer).unwrap();
-        let test: Check<EmailAlertChannel> = toml::from_str(&buffer).unwrap();
+        let test: Check = toml::from_str(&buffer).unwrap();
 
         println!("{:?}\n\n", test);
 
